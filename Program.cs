@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using P_n_F.Core;
 
 namespace P_n_F
 {
@@ -7,14 +8,17 @@ namespace P_n_F
     {
         static void Main(string[] args)
         {
-            ReadPort readPort1 = new ReadPort();
-            ReadPort readPort2 = new ReadPort();
+            //ReadPort readPort1 = new ReadPort();
+            //ReadPort readPort2 = new ReadPort();
 
-            Thread thread = new Thread(readPort1.Listen);
-            Thread thread2 = new Thread(readPort2.Listen);
+            //Thread thread = new Thread(readPort1.Listen);
+            //Thread thread2 = new Thread(readPort2.Listen);
 
-            thread.Start(25000);
-            thread2.Start(25001);
+            //thread.Start(25000);
+            //thread2.Start(25001);
+            PayloadAnalyzer p = new PayloadAnalyzer();
+
+            var type = p.GetType("");
         }
     }
 }

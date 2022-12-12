@@ -7,7 +7,7 @@ namespace P_n_F
 {
     public class ReadPort
     {
-        private const int MAXCONNECTIONS = 10;
+        private const int MAXQUEUESIZE = 10;
         private const int BUFFERSIZE = 2048;
         public void Listen(object port)
         {
@@ -17,24 +17,25 @@ namespace P_n_F
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             socket.Bind(localEndPoint);
-            socket.Listen(MAXCONNECTIONS);
+            socket.Listen(MAXQUEUESIZE);
 
             while(true)
             {
-                Socket handler = socket.Accept();
+                Socket pair = socket.Accept();
                 byte[] buffer = new byte[BUFFERSIZE];
-                int bytesReceived = handler.Receive(buffer, SocketFlags.None);
+                int bytesReceived = pair.Receive(buffer, SocketFlags.None);
 
-                var data = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
-                System.Console.WriteLine($"{handler.RemoteEndPoint} - sent the message: {data}");
+                var payload = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
+                System.Console.WriteLine($"{pair.RemoteEndPoint} - sent the message: {payload}");
 
-                Dispose(ref handler, ref buffer, ref bytesReceived);
+                Dispose(ref pair, ref buffer, ref bytesReceived);
             }
         }
 
-        private void Dispose(ref Socket handler, ref byte[]buffer, ref int bytesReceived)
+        private void Dispose(ref Socket pair, ref byte[]buffer, ref int bytesReceived)
         {
-            handler.Close();
+            pair.Shutdown(SocketShutdown.Both);
+            pair.Close();
             buffer = Array.Empty<byte>();
             bytesReceived = 0;
         }
