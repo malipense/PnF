@@ -6,4 +6,8 @@
     <RootNamespace>P_n_F</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.11.1" />
+  </ItemGroup>
+
 </Project>

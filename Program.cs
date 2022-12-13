@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using P_n_F.Core;
+using P_n_F.ServiceBus;
 
 namespace P_n_F
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+            AzureServiceBusClient azureClient = new AzureServiceBusClient();
+
+            
+            while (true)
+            {
+                await azureClient.Peek();
+            }
             //ReadPort readPort1 = new ReadPort();
             //ReadPort readPort2 = new ReadPort();
 
@@ -16,9 +25,12 @@ namespace P_n_F
 
             //thread.Start(25000);
             //thread2.Start(25001);
-            PayloadAnalyzer p = new PayloadAnalyzer();
+            //PayloadAnalyzer p = new PayloadAnalyzer();
 
-            var type = p.GetType("");
+            //var type = p.GetType("");
+
+
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text;
 using System;
+using System.Threading.Tasks;
 
 namespace P_n_F
 {
@@ -9,7 +10,7 @@ namespace P_n_F
     {
         private const int MAXQUEUESIZE = 10;
         private const int BUFFERSIZE = 2048;
-        public void Listen(object port)
+        public async Task Listen(object port)
         {
             IPAddress ipAddress = IPAddress.Loopback;
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, (int)port);
@@ -19,17 +20,14 @@ namespace P_n_F
             socket.Bind(localEndPoint);
             socket.Listen(MAXQUEUESIZE);
 
-            while(true)
-            {
-                Socket pair = socket.Accept();
-                byte[] buffer = new byte[BUFFERSIZE];
-                int bytesReceived = pair.Receive(buffer, SocketFlags.None);
+            Socket pair = await socket.AcceptAsync();
+            byte[] buffer = new byte[BUFFERSIZE];
+            int bytesReceived = await pair.ReceiveAsync(buffer, SocketFlags.None);
 
-                var payload = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
-                System.Console.WriteLine($"{pair.RemoteEndPoint} - sent the message: {payload}");
+            var payload = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
+            System.Console.WriteLine($"{pair.RemoteEndPoint} - sent the message: {payload}");
 
-                Dispose(ref pair, ref buffer, ref bytesReceived);
-            }
+            Dispose(ref pair, ref buffer, ref bytesReceived);
         }
 
         private void Dispose(ref Socket pair, ref byte[]buffer, ref int bytesReceived)
