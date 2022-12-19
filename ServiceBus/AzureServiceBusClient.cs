@@ -5,7 +5,9 @@ namespace P_n_F.ServiceBus
 {
     internal class AzureServiceBusClient
     {
-        private const string connectionString = "";
+        public string Message { get; private set; }
+
+        private const string connectionString = "Endpoint=sb://pnfsource.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=bR+4Kg01tMVcdNl45whg7vMZYm503F6YV7aAKZvS1nw=";
         private const string queueName = "message-queue";
         private ServiceBusClient client;
         private ServiceBusProcessor busProcessor;
@@ -36,7 +38,7 @@ namespace P_n_F.ServiceBus
         }
         async Task MessageHandler(ProcessMessageEventArgs args)
         {
-            string body = args.Message.Body.ToString();
+            Message = args.Message.Body.ToString();
             await args.CompleteMessageAsync(args.Message);
         }
         Task ErrorHandler(ProcessErrorEventArgs args)

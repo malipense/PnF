@@ -10,26 +10,19 @@ namespace P_n_F
     {
         static async Task Main(string[] args)
         {
-            AzureServiceBusClient azureClient = new AzureServiceBusClient();
+            string message;
+            AzureServiceBusClient serviceBusClient = new AzureServiceBusClient();
+            HL7Converter hl7Converter = new HL7Converter();
 
-            
             while (true)
             {
-                await azureClient.Peek();
+                await serviceBusClient.Peek();
+                if (!string.IsNullOrEmpty(serviceBusClient.Message))
+                    message = hl7Converter.Convert(serviceBusClient.Message);
             }
-            //ReadPort readPort1 = new ReadPort();
-            //ReadPort readPort2 = new ReadPort();
-
-            //Thread thread = new Thread(readPort1.Listen);
-            //Thread thread2 = new Thread(readPort2.Listen);
-
-            //thread.Start(25000);
-            //thread2.Start(25001);
-            //PayloadAnalyzer p = new PayloadAnalyzer();
-
-            //var type = p.GetType("");
-
-
+        }
+        static void Process()
+        {
 
         }
     }
